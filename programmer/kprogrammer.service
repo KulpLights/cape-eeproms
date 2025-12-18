@@ -1,8 +1,8 @@
 [Unit]
 Description=KulpLights Programmer
 Documentation=https://kulplights.com
-After=network.target
-Wants=network.target home-fpp-media.mount
+After=network.target network-online.target
+Wants=network.target network-online.target  home-fpp-media.mount
 
 [Service]
 WorkingDirectory=/home/fpp/media/cape-eeproms/programmer

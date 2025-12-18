@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cd /home/fpp/media/cape-eeproms
-git pull -f
 
 if [ -f /dev/mmcblk0p1 ]; then
     mount -t auto /dev/mmcblk0p1 /mnt
@@ -17,3 +16,15 @@ if [ -f /dev/mmcblk0p1 ]; then
     chmod +x /home/fpp/media/cape-eeproms/programmer/*.sh
     umount /mnt
 fi 
+
+
+
+for i in {1..10}; do
+    sudo -u fpp git -c http.sslVerify=false pull -f --rebase
+    if [ $? -ne 0 ]; then
+        sleep 2
+    else
+        exit 0
+    fi
+done
+
