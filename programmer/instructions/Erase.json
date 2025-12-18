@@ -1,0 +1,52 @@
+{
+    "init": [
+        {
+            "action": "validateI2CDevices",
+            "message": "Validate I2C",
+            "comment": "Check to make sure the main I2C devices are present before using any of them",
+            "devices": [
+                {
+                    "address": "0x20",
+                    "message": "GPIO Exp"
+                },
+                {
+                    "address": "0x21",
+                    "message": "GPIO Exp"
+                },
+                {
+                    "address": "0x51",
+                    "message": "RTC"
+                },
+                {
+                    "address": "0x4b",
+                    "message": "Temp Sensor"
+                }
+            ]
+        },
+        {
+            "comment": "We need the GPIO Exp to be configured for the nrt/binvoke to flash the MSPM0",
+            "action": "addI2CDevice",
+            "device": "pca9674",
+            "address": "0x20",
+            "message": "Add GPIO Exp"
+        }
+    ],
+    "steps": [
+        {
+            "action": "flashMSPM0",
+            "nrst": "pca9674-0",
+            "binvoke": "pca9674-1",
+            "eeprom": "/tmp/eeprom.bin",
+            "firmware": "-erase-",
+            "skipVendorImage": true,
+            "message": "Erase MSPM0-1"
+        }
+    ],
+    "cleanup": [
+        {
+            "action": "removeI2CDevice",
+            "address": "0x20",
+            "message": "Remove GPIO Exp"
+        }
+    ]
+}

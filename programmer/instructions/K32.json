@@ -1,0 +1,93 @@
+{
+    "init": [
+        {
+            "action": "validateI2CDevices",
+            "message": "Validate I2C",
+            "comment": "Check to make sure the main I2C devices are present before using any of them",
+            "devices": [
+                {
+                    "address": "0x20",
+                    "message": "GPIO Exp"
+                },
+                {
+                    "address": "0x51",
+                    "message": "RTC"
+                },
+                {
+                    "address": "0x4b",
+                    "message": "Temp Sensor"
+                },
+                {
+                    "address": "0x3c",
+                    "message": "OLED"
+                }
+            ]
+        },
+        {
+            "comment": "We need the GPIO Exp to be configured for the nrt/binvoke to flash the MSPM0",
+            "action": "addI2CDevice",
+            "device": "pca9674",
+            "address": "0x20",
+            "message": "Add GPIO Exp"
+        }
+    ],
+    "steps": [
+        {
+            "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
+            "message": "Generate EEPROM",
+            "action": "generateEEPROM",
+            "source": "../K32/K32-4.0-eeprom.bin",
+            "target": "/tmp/eeprom.bin"
+        },
+        {
+            "action": "flashMSPM0",
+            "nrst": "pca9674-0",
+            "binvoke": "pca9674-1",
+            "eeprom": "/tmp/eeprom.bin",
+            "firmware": "mspm0-adc-eeprom.txt",
+            "skipVendorImage": false,
+            "message": "Flash MSPM0",
+            "i2cDev": "0x50"
+        },
+        {
+            "skip": false,
+            "comment": "Set the RTC to the current time.  Note: if no battery is present, the RTC will not keep the time.",
+            "action": "setRTC",
+            "device": "pcf85363",
+            "message": "Set RTC Time"
+        },
+        {
+            "message": "Validate I2C",
+            "action": "validateI2CDevices",
+            "comment": "Check to make sure EEPROM and ADC are present after flashing",
+            "devices": [
+                {
+                    "address": "0x50",
+                    "message": "EEPROM"
+                },
+                {
+                    "address": "0x28",
+                    "message": "A2D"
+                }
+            ]
+        },
+        {
+            "message": "Validate EEPROM",
+            "comment": "Make sure the EEPROM is valid after flashing",
+            "action": "validateEEPROM",
+            "eeprom": "/tmp/eeprom.bin"
+        }
+    ],
+    "cleanup": [
+        {
+            "action": "removeI2CDevice",
+            "address": "0x20",
+            "message": "Remove GPIO Exp"
+        },
+        {
+            "action": "removeFile",
+            "file": "/tmp/eeprom.bin",
+            "message": "Remove EEPROM"
+        }
+    ]
+}

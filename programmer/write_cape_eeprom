@@ -1,0 +1,117 @@
+#! /usr/bin/php
+<?php
+
+// argv[1] - bin file
+// argv[2] - serial number
+
+
+function endsWith($haystack, $needle) {
+    return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+}
+function writeDataToEEPROM($data) {
+    $fp = fopen('/sys/bus/i2c/devices/2-0050/eeprom', 'wb');
+    set_file_buffer($fp, 32768);
+    if (fwrite($fp, $data) === false) {
+        echo "Error writing eeprom\n";
+    }
+    if (fflush($fp) === false) {
+        echo "Error flushing eeprom\n";
+    }
+    fclose($fp);
+}
+
+
+
+$board = substr($argv[1], 0, strrpos($argv[1], "-eeprom"));
+if (endsWith($board, "-W") || endsWith($board, "-Y")) {
+    $board = substr($board, 0, strlen($board) - 2);
+}
+if (endsWith($board, "-RTC") || endsWith($board, "-RTC")) {
+    $board = substr($board, 0, strlen($board) - 4);
+}
+if (endsWith($board, "-NONE")) {
+    $board = substr($board, 0, strlen($board) - 5);
+}
+if (endsWith($board, "-ds1307")) {
+    $board = substr($board, 0, strlen($board) - 7);
+}
+if (endsWith($board, "-pcf8523")) {
+    $board = substr($board, 0, strlen($board) - 8);
+}
+if (endsWith($board, "-pcf85363")) {
+    $board = substr($board, 0, strlen($board) - 9);
+}
+// detect and initialize the eeprom, only support 24c256 chips for now
+if (!file_exists("/sys/bus/i2c/devices/2-0050/eeprom")) {
+    file_put_contents("/sys/bus/i2c/devices/i2c-2/new_device", "24c256 0x50");
+}
+
+$data = file_get_contents($argv[1]);
+
+
+if ($argc > 2) {
+    $serialNumber = pack("a16", $argv[2]);
+} else {
+    $serialNumber = $data[108];
+    $serialNumber = strtoupper($serialNumber);
+    $serialNumber = $serialNumber . date("ymdHis");
+}
+
+
+$max = 16;
+if (strlen($serialNumber) < 16) {
+    $max = strlen($serialNumber);
+}
+for ($i = 0; $i < $max; $i++) {
+    $data[$i + 42] = $serialNumber[$i];
+}
+
+// $data[108] . $data[109] are the "key id" used to sign
+$vid = "FPP" . $serialNumber . $data[108] . $data[109];
+$vid = base64_encode(md5( $vid, true));
+for ($i = 0; $i < 22; $i++) {
+    $data[$i + 78] = $vid[$i];
+}
+$vid = substr($vid, 0, 22);
+$serialNumber = trim($serialNumber);
+echo "SN: " . $serialNumber . "   Key: " . $vid . "\n";
+
+writeDataToEEPROM($data);
+$newdata = file_get_contents('/sys/bus/i2c/devices/2-0050/eeprom', false, NULL, 0, strlen($data));
+$eepromOK = True;
+if ($newdata != $data) {
+    echo "\n\nError verifying data - Will try again.\n";
+    writeDataToEEPROM($data);
+    $newdata = file_get_contents('/sys/bus/i2c/devices/2-0050/eeprom', false, NULL, 0, strlen($data));
+    if ($newdata != $data) {
+        $eepromOK = false;
+        echo "\n\nError verifying data!!!!!\n\n";
+    }
+}
+
+file_put_contents("/sys/bus/i2c/devices/i2c-2/delete_device", "0x50");
+
+/*
+$url = "https://kulplights.com/sn/record?board=". $board ."&sn=" . $serialNumber . "&cs=" . $vid;
+echo $url  . "\n";
+$ch = curl_init($url); // such as http://example.com/example.xml
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+$retData = curl_exec($ch);
+curl_close($ch);
+*/
+
+$txt = $board . "\t" . $serialNumber . "\t" . $vid;
+file_put_contents('serialNumbers.txt', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+
+echo "\n";
+if ($eepromOK) {
+    echo "\e[32mEEPROM Write Success!\e[0m\n\n";
+    exit(0);
+} else {
+    echo "\e[91mERROR Writing EEPROM\e[0m\n\n";
+    exit(-1);
+}
+
+?>
+

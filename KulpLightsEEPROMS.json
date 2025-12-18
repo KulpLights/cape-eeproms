@@ -1,0 +1,509 @@
+{
+    "name": "Kulp Lights",
+    "url": "https://kulplights.com",
+    "capes": {
+        "K4-PB": {
+            "description": "4 Output String Cape",
+            "versions": {
+                "1.x (White)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-1.0-W-eeprom.bin"
+                },
+                "1.x (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-1.0-Y-eeprom.bin"
+                },
+                "2.0/2.1 (White)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-2.0-W-eeprom.bin"
+                },
+                "2.0/2.1 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-2.0-Y-eeprom.bin"
+                },
+                "2.2 (White)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-2.2-W-eeprom.bin"
+                },
+                "2.2 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-2.2-Y-eeprom.bin"
+                },
+                "3.0": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-3.0-eeprom.bin"
+                },
+                "3.0 (PocketBeagle2)": {
+                    "url": "https://kulplights.com/firmwares/K4-PB/K4-PB-3.0-eeprom.bin",
+                    "platforms": [
+                        "PocketBeagle2"
+                    ]
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle", "PocketBeagle2"
+            ]
+        },
+        "K8-B": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "4.0/4.1 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-4.0-W-eeprom.bin"
+                },
+                "4.0/4.1 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-4.0-Y-eeprom.bin"
+                },
+                "4.2 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-4.2-W-eeprom.bin"
+                },
+                "4.2 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-4.2-Y-eeprom.bin"
+                },
+                "4.3": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-4.3-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]
+        },
+        "K8-Pi": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "1.0": {
+                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-1.0-eeprom.bin"
+                },
+                "2.0": {
+                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-2.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "Raspberry Pi"
+            ]
+        },
+        "K2-Pi0": {
+            "description": "2 Output String Cape",
+            "versions": {
+                "1.0": {
+                    "url": "https://kulplights.com/firmwares/K2-Pi0/K2-Pi0-1.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "Raspberry Pi"
+            ]
+        },
+        "K2-Pi-Servo": {
+            "description": "2 Output String Cape and 16 Servos",
+            "versions": {
+                "1.0": {
+                    "url": "https://kulplights.com/firmwares/K2-Pi-Servo/K2-Pi-Servo-1.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "Raspberry Pi"
+            ]
+        },
+        "K8-B-Scroller": {
+            "description": "8 Output String Cape with Panels",
+            "versions": {
+                "1.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-Scroller-1.0-W-eeprom.bin"
+                },
+                "1.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-Scroller-1.0-Y-eeprom.bin"
+                },
+                "1.1 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-Scroller-1.1-W-eeprom.bin"
+                },
+                "1.1 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-B/K8-B-Scroller-1.1-Y-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]
+        },
+        "K8-PB": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "1.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-1.0-W-eeprom.bin"
+                },
+                "1.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-1.0-Y-eeprom.bin"
+                },
+                "1.1 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-1.1-W-eeprom.bin"
+                },
+                "1.1 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-1.1-Y-eeprom.bin"
+                },
+                "1.2 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-1.2-W-eeprom.bin"
+                },
+                "1.2 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-1.2-Y-eeprom.bin"
+                },
+                "2.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-2.0-W-eeprom.bin"
+                },
+                "2.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-2.0-Y-eeprom.bin"
+                },
+                "2.1 (PocketBeagle2)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-2.0-PB2-eeprom.bin",
+                    "platforms": [
+                        "PocketBeagle2"
+                    ]
+                },
+                "2.5/2.6 (PocketBeagle2)": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-2.5-PB2-eeprom.bin",
+                    "platforms": [
+                        "PocketBeagle2"
+                    ]
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle", "PocketBeagle2"
+            ]
+        },
+        "F8-PB": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "2.0": {
+                    "url": "https://kulplights.com/firmwares/F8-PB/F8-PB-2.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle"
+            ]
+        },
+        "F40-PB": {
+            "description": "40 Output Differential Cape",
+            "versions": {
+                "1.0": {
+                    "url": "https://kulplights.com/firmwares/F40-PB/F40-PB-1.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle"
+            ]
+        },
+        "K16A-B": {
+            "description": "16 Output String Cape",
+            "versions": {
+                "0.9 (White)": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-0.9-W-eeprom.bin"
+                },
+                "0.9 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-0.9-W-eeprom.bin"
+                },
+                "1.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-1.0-W-eeprom.bin"
+                },
+                "1.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-1.0-W-eeprom.bin"
+                },
+                "1.1 (White)": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-1.1-W-eeprom.bin"
+                },
+                "1.1 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-1.1-W-eeprom.bin"
+                },
+                "1.2": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-1.2-eeprom.bin"
+                },
+                "2.0": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-2.0-eeprom.bin"
+                },
+                "3.0": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-3.0-eeprom.bin"
+                },
+                "3.0.1": {
+                    "url": "https://kulplights.com/firmwares/K16A-B/K16A-B-3.0.1-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]        
+        },
+        "K8-Max": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.1": {
+                    "url": "https://kulplights.com/firmwares/K8-Max/K8-Max-4.0-eeprom.bin",
+                    "notes":  "Fixes issues with push buttons not working"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K16": {
+            "description": "16 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K16/K16-4.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K16-Pro": {
+            "description": "16 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K16-Max": {
+            "description": "16 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K16-Max/K16-Max-4.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K32": {
+            "description": "32 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K32/K32-4.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K32-Pro": {
+            "description": "32 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K32-Pro/K32-Pro-4.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K32-Max": {
+            "description": "32 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
+        "K32A-B": {
+            "description": "32 Output String Cape",
+            "versions": {
+                "1.1 (White)": {
+                    "url": "https://kulplights.com/firmwares/K32A-B/K32A-B-1.1-W-eeprom.bin"
+                },
+                "1.1 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K32A-B/K32A-B-1.1-Y-eeprom.bin"
+                },
+                "1.2 (White)": {
+                    "url": "https://kulplights.com/firmwares/K32A-B/K32A-B-1.2-W-eeprom.bin"
+                },
+                "1.2 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K32A-B/K32A-B-1.2-Y-eeprom.bin"
+                },
+                "1.3": {
+                    "url": "https://kulplights.com/firmwares/K32A-B/K32A-B-1.3-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]        
+        },
+        "K40D-PB": {
+            "description": "40 Differential String cape for PocketBeagle",
+            "versions": {
+                "2.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K40D-PB/K40D-PB-2.0-W-eeprom.bin"
+                },
+                "2.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K40D-PB/K40D-PB-2.0-W-eeprom.bin"
+                },
+                "3.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K40D-PB/K40D-PB-3.0-W-eeprom.bin"
+                },
+                "3.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K40D-PB/K40D-PB-3.0-W-eeprom.bin"
+                },
+                "3.0 (PocketBeagle2)": {
+                    "url": "https://kulplights.com/firmwares/K40D-PB/K40D-PB-3.0-PB2-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle", "PocketBeagle2"
+            ]
+        },
+        "K64D-B": {
+            "description": "64 Differential String cape for BeagleBone Black",
+            "versions": {
+                "1.0": {
+                    "url": "https://kulplights.com/firmwares/K64D-B/K64D-B-1.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]
+        },
+        "K128D-B": {
+            "description": "128 Differential String cape for BeagleBone Black",
+            "versions": {
+                "1.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/K128D-B/K128D-B-1.0-W-eeprom.bin"
+                },
+                "1.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/K128D-B/K128D-B-1.0-W-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]        
+        },
+        "OctoPlus": {
+            "description": "Panel Cape for BeagleBone Black",
+            "versions": {
+                "2.x (White)": {
+                    "url": "https://kulplights.com/firmwares/OctoPlus/OctoPlus-2.0-W-eeprom.bin"
+                },
+                "2.x (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/OctoPlus/OctoPlus-2.0-W-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]        
+        },
+        "PocketScroller": {
+            "description": "Panel Cape for PocketBeagle",
+            "versions": {
+                "1.2 (White)": {
+                    "url": "https://kulplights.com/firmwares/PocketScroller/PocketScroller-1.2-W-eeprom.bin"
+                },
+                "1.2 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/PocketScroller/PocketScroller-1.2-W-eeprom.bin"
+                },
+                "3.0": {
+                    "url": "https://kulplights.com/firmwares/PocketScroller/PocketScroller-3.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle", "PocketBeagle2"
+            ]
+        },
+        "Pi-OLED": {
+            "description": "OLED Display for Raspberry Pi",
+            "versions": {
+                "1.0-1.2 (White)": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-1.0-W-eeprom.bin"
+                },
+                "1.0-1.2 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-1.0-W-eeprom.bin"
+                },
+                "1.3 (White)": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-1.3-W-eeprom.bin"
+                },
+                "1.3 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-1.3-W-eeprom.bin"
+                },
+                "2.0": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-2.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "Raspberry Pi"
+            ]
+        },
+        "BBB-OLED": {
+            "description": "OLED Display for BeagleBone Black",
+            "versions": {
+                "1.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/BBB-OLED/BBBOLED-1.0-W-eeprom.bin"
+                },
+                "1.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/BBB-OLED/BBBOLED-1.0-W-eeprom.bin"
+                },
+                "2.0 (White)": {
+                    "url": "https://kulplights.com/firmwares/BBB-OLED/BBBOLED-2.0-W-eeprom.bin"
+                },
+                "2.0 (Blue/Yellow)": {
+                    "url": "https://kulplights.com/firmwares/BBB-OLED/BBBOLED-2.0-W-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "BeagleBone Black"
+            ]        
+        },
+        "F8-B": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "1.x": {
+                    "location": "virtual",
+                    "url": "https://kulplights.com/firmwares/F8-B/F8-B-1.0-eeprom.bin"
+                },
+                "2.x": {
+                    "location": "eeprom",
+                    "url": "https://kulplights.com/firmwares/F8-B/F8-B-2.0-eeprom.bin"
+                },
+                "3.x": {
+                    "location": "eeprom",
+                    "url": "https://kulplights.com/firmwares/F8-B/F8-B-3.0-eeprom.bin"
+                }
+            },
+            "platforms": [
+                "BeagleBone Black"
+            ]
+        },
+        "F32-B": {
+            "description": "32 Output String Cape",
+            "versions": {
+                "1.0": {
+                    "location": "virtual",
+                    "url": "https://kulplights.com/firmwares/F32-B/F32-B-1.0-eeprom.bin"
+                },
+                "2.0": {
+                    "location": "eeprom",
+                    "url": "https://kulplights.com/firmwares/F32-B/F32-B-2.0-eeprom.bin"
+                }
+            },
+            "platforms": [
+                "BeagleBone Black"
+            ]
+        }
+
+    }
+}

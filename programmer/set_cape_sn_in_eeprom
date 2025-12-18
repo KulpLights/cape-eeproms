@@ -1,0 +1,41 @@
+#! /usr/bin/php
+<?php
+
+// argv[1] - bin file
+// argv[2] - output file
+// argv[3] - serial number
+
+$data = file_get_contents($argv[1]);
+
+if ($argc > 3) {
+    $serialNumber = pack("a16", $argv[3]);
+} else {
+    $serialNumber = $data[108];
+    $serialNumber = strtoupper($serialNumber);
+    $serialNumber = $serialNumber . date("ymdHis");
+}
+
+$max = 16;
+if (strlen($serialNumber) < 16) {
+    $max = strlen($serialNumber);
+}
+for ($i = 0; $i < $max; $i++) {
+    $data[$i + 42] = $serialNumber[$i];
+}
+
+// $data[108] . $data[109] are the "key id" used to sign
+$vid = "FPP" . $serialNumber . $data[108] . $data[109];
+$vid = base64_encode(md5( $vid, true));
+for ($i = 0; $i < 22; $i++) {
+    $data[$i + 78] = $vid[$i];
+}
+$vid = substr($vid, 0, 22);
+$serialNumber = trim($serialNumber);
+echo "SN: " . $serialNumber . "   Key: " . $vid . "\n";
+
+file_put_contents($argv[2], $data);
+
+$txt = $argv[1] . "\t" . $serialNumber . "\t" . $vid;
+file_put_contents('serialNumbers.txt', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+?>
+

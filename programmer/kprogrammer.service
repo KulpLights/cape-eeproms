@@ -1,0 +1,14 @@
+[Unit]
+Description=KulpLights Programmer
+Documentation=https://kulplights.com
+After=network.target
+Wants=network.target home-fpp-media.mount
+
+[Service]
+WorkingDirectory=/home/fpp/media/cape-eeproms/programmer
+ExecStartPre=/home/fpp/media/cape-eeproms/programmer/check_for_new.sh
+ExecStart=/home/fpp/media/cape-eeproms/programmer/programmer
+Type=simple
+
+[Install]
+WantedBy=default.target
