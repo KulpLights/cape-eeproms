@@ -1,0 +1,69 @@
+{
+    "init": [
+        {
+            "action": "validateI2CDevices",
+            "message": "Validate I2C",
+            "comment": "Check to make sure the main I2C devices are present before using any of them",
+            "devices": [
+                {
+                    "address": "0x20",
+                    "message": "GPIO Exp"
+                },
+                {
+                    "address": "0x21",
+                    "message": "GPIO Exp"
+                },
+                {
+                    "address": "0x51",
+                    "message": "RTC"
+                },
+                {
+                    "address": "0x50",
+                    "message": "EEPROM"
+                },
+                {
+                    "address": "0x49",
+                    "message": "Temp Sensor"
+                },
+                {
+                    "address": "0x48",
+                    "message": "A2D"
+                }
+            ]
+        }
+    ],
+    "steps": [
+        {
+            "comment": "Set the RTC to the current time.  Note: if no battery is present, the RTC will not keep the time.",
+            "action": "setRTC",
+            "device": "pcf85363",
+            "message": "Set RTC Time",
+            "skip": false
+        },
+        {
+            "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
+            "message": "Generate EEPROM",
+            "action": "generateEEPROM",
+            "source": "../K8-Pi/K8-Pi-2.0-eeprom.bin",
+            "target": "/tmp/eeprom.bin"
+        },
+        {
+            "action": "flashEEPROM",
+            "eeprom": "/tmp/eeprom.bin",
+            "message": "Flash EEPROM"
+        },
+        {
+            "message": "Validate EEPROM",
+            "comment": "Make sure the EEPROM is valid after flashing",
+            "action": "validateEEPROM",
+            "eeprom": "/tmp/eeprom.bin"
+        }
+    ],
+    "cleanup": [        
+        {
+            "action": "removeFile",
+            "file": "/tmp/eeprom.bin",
+            "message": "Remove EEPROM"
+        }
+    ]
+}
