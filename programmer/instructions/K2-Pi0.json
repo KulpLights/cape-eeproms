@@ -1,0 +1,46 @@
+{
+    "init": [
+        {
+            "action": "validateI2CDevices",
+            "message": "Validate I2C",
+            "comment": "Check to make sure the main I2C devices are present before using any of them",
+            "devices": [
+                {
+                    "address": "0x50",
+                    "message": "EEPROM"
+                },
+                {
+                    "address": "0x48",
+                    "message": "A2D"
+                }
+            ]
+        }
+    ],
+    "steps": [
+        {
+            "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
+            "message": "Generate EEPROM",
+            "action": "generateEEPROM",
+            "source": "../K2-Pi0/K2-Pi0-1.0-eeprom.bin",
+            "target": "/tmp/eeprom.bin"
+        },
+        {
+            "action": "flashEEPROM",
+            "eeprom": "/tmp/eeprom.bin",
+            "message": "Flash EEPROM"
+        },
+        {
+            "message": "Validate EEPROM",
+            "comment": "Make sure the EEPROM is valid after flashing",
+            "action": "validateEEPROM",
+            "eeprom": "/tmp/eeprom.bin"
+        }
+    ],
+    "cleanup": [        
+        {
+            "action": "removeFile",
+            "file": "/tmp/eeprom.bin",
+            "message": "Remove EEPROM"
+        }
+    ]
+}
