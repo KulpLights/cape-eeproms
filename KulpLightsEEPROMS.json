@@ -383,6 +383,9 @@
                 },
                 "1.0 (Blue/Yellow)": {
                     "url": "https://kulplights.com/firmwares/K128D-B/K128D-B-1.0-W-eeprom.bin"
+                },
+                "1.1": {
+                    "url": "https://kulplights.com/firmwares/K128D-B/K128D-B-1.1-eeprom.bin"
                 }
             },
             "location": "eeprom",
