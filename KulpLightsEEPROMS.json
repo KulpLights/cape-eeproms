@@ -233,9 +233,9 @@
         "K8-Max": {
             "description": "8 Output String Cape",
             "versions": {
-                "Hardware Version 4.0 / EEPROM 4.0.1": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K8-Max/K8-Max-4.0-eeprom.bin",
-                    "notes":  "Fixes issues with push buttons not working"
+                    "notes":  "Fixes issues with back/enter buttons being reversed. Exp7/8 reversed."
                 }
             },
             "location": "eeprom",
