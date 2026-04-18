@@ -243,6 +243,19 @@
                 "PocketBeagle2"
             ]
         },
+        "K8-Pro": {
+            "description": "8 Output String Cape",
+            "versions": {
+                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                    "url": "https://kulplights.com/firmwares/K8-Pro/K8-Pro-4.0-eeprom.bin",
+                    "notes":  ""
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "PocketBeagle2"
+            ]
+        },
         "K16": {
             "description": "16 Output String Cape",
             "versions": {
