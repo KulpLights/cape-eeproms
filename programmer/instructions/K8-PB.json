@@ -1,4 +1,7 @@
 {
+    "properties": {
+        "version": "2.6"
+    },
     "init": [
         {
             "action": "validateI2CDevices",
@@ -32,7 +35,7 @@
             "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
             "message": "Generate EEPROM",
             "action": "generateEEPROM",
-            "source": "../K8-PB/K8-PB-2.5-PB2-eeprom.bin",
+            "source": "%BASE%/K8-PB/K8-PB-%version%-PB2-eeprom.bin",
             "target": "/tmp/eeprom.bin"
         },
         {

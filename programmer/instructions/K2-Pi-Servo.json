@@ -1,4 +1,7 @@
 {
+    "properties": {
+        "version": "1.0"
+    },
     "init": [
         {
             "action": "validateI2CDevices",
@@ -25,7 +28,7 @@
             "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
             "message": "Generate EEPROM",
             "action": "generateEEPROM",
-            "source": "../K2-Pi-Servo/K2-Pi-Servo-1.0-eeprom.bin",
+            "source": "%BASE%/K2-Pi-Servo/K2-Pi-Servo-%version%-eeprom.bin",
             "target": "/tmp/eeprom.bin"
         },
         {

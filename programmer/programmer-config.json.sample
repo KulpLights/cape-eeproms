@@ -1,0 +1,4 @@
+{
+    "eepromBase": "../cape-eeproms",
+    "instructionsDir": "%BASE%/programmer/instructions"
+}

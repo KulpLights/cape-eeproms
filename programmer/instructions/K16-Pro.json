@@ -1,4 +1,7 @@
 {
+    "properties": {
+        "version": "4.1"
+    },
     "init": [
         {
             "action": "validateI2CDevices",
@@ -36,7 +39,7 @@
             "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
             "message": "Generate EEPROM",
             "action": "generateEEPROM",
-            "source": "../K16-Pro/K16-Pro-4.1-eeprom.bin",
+            "source": "%BASE%/K16-Pro/K16-Pro-%version%-eeprom.bin",
             "target": "/tmp/eeprom.bin"
         },
         {

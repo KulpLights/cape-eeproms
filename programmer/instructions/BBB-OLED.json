@@ -1,4 +1,7 @@
 {
+    "properties": {
+        "version": "2.0"
+    },
     "init": [
         {
             "action": "validateI2CDevices",
@@ -32,7 +35,7 @@
             "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
             "message": "Generate EEPROM",
             "action": "generateEEPROM",
-            "source": "../BBB-OLED/BBBOLED-2.0-Y-eeprom.bin",
+            "source": "%BASE%/BBB-OLED/BBBOLED-%version%-Y-eeprom.bin",
             "target": "/tmp/eeprom.bin"
         },
         {

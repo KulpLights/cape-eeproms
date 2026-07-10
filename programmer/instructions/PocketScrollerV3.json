@@ -1,4 +1,7 @@
 {
+    "properties": {
+        "version": "3.0"
+    },
     "init": [
         {
             "action": "validateI2CDevices",
@@ -35,7 +38,7 @@
             "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
             "message": "Generate EEPROM",
             "action": "generateEEPROM",
-            "source": "../PocketScroller/PocketScroller-3.0-eeprom.bin",
+            "source": "%BASE%/PocketScroller/PocketScroller-%version%-eeprom.bin",
             "target": "/tmp/eeprom.bin"
         },
         {

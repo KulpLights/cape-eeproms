@@ -1,4 +1,7 @@
 {
+    "properties": {
+        "version": "1.1"
+    },
     "init": [
         {
             "action": "validateI2CDevices",
@@ -32,7 +35,7 @@
             "comment": "Invokes the set_cape_sn_in_eeprom script to create the EEPROM with the current cape serial number.",
             "message": "Generate EEPROM",
             "action": "generateEEPROM",
-            "source": "../K128D-B/K128D-B-1.1-eeprom.bin",
+            "source": "%BASE%/K128D-B/K128D-B-%version%-eeprom.bin",
             "target": "/tmp/eeprom.bin"
         },
         {
