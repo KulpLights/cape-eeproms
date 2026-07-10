@@ -1,4 +1,6 @@
 {
-    "eepromBase": "../cape-eeproms",
-    "instructionsDir": "%BASE%/programmer/instructions"
+    "eepromBase": "../ww/",
+    "instructionsDir": "instructions",
+    "oledType": "white",
+    "oledFlipped": false
 }
