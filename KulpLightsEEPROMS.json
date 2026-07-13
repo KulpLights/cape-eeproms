@@ -332,6 +332,9 @@
             "versions": {
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.0-eeprom.bin"
+                },
+                "Hardware Version 4.1 / EEPROM 4.1": {
+                    "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.1-eeprom.bin"
                 }
             },
             "location": "eeprom",
