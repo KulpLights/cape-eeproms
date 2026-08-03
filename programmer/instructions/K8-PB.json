@@ -45,7 +45,8 @@
             "eeprom": "/tmp/eeprom.bin",
             "firmware": "mspm0-adc-eeprom.txt",
             "skipVendorImage": false,
-            "message": "Flash MSPM0-1"
+            "message": "Flash MSPM0-1",
+            "i2cDev": "0x50"
         },
         {
             "skip": false,
