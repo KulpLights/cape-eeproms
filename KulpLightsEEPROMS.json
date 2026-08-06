@@ -479,6 +479,30 @@
                 "Raspberry Pi"
             ]
         },
+        "ShowPlayer": {
+            "description": "ShowPlayer",
+            "versions": {
+                "1.0": {
+                    "url": "https://kulplights.com/firmwares/ShowPlayer/ShowPlayer-1.0-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "Raspberry Pi"
+            ]
+        },
+        "ShowPlayerTouch": {
+            "description": "ShowPlayer Touch",
+            "versions": {
+                "1.1": {
+                    "url": "https://kulplights.com/firmwares/ShowPlayerTouch/ShowPlayerTouch-1.1-eeprom.bin"
+                }
+            },
+            "location": "eeprom",
+            "platforms": [
+                "Raspberry Pi"
+            ]
+        },
         "BBB-OLED": {
             "description": "OLED Display for BeagleBone Black",
             "versions": {
