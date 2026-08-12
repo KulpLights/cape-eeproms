@@ -246,7 +246,7 @@
         "K16-Max": {
             "description": "16 Output String Cape",
             "versions": {
-                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                "Hardware Version 4.0 / EEPROM 4.0.4": {
                     "url": "https://wiredwatts.com/firmwares/K16-Max/K16-Max-4.0-eeprom.bin"
                 }
             },
