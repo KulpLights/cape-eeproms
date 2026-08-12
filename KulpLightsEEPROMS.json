@@ -254,7 +254,7 @@
         "K8-Pro": {
             "description": "8 Output String Cape",
             "versions": {
-                "Hardware Version 4.0 / EEPROM 4.0.2": {
+                "Hardware Version 4.0 / EEPROM 4.0.1": {
                     "url": "https://kulplights.com/firmwares/K8-Pro/K8-Pro-4.0-eeprom.bin",
                     "notes": ""
                 }
@@ -282,7 +282,7 @@
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.0-eeprom.bin"
                 },
-                "Hardware Version 4.1 / EEPROM 4.1": {
+                "Hardware Version 4.1 / EEPROM 4.1.1": {
                     "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.1-eeprom.bin"
                 }
             },
