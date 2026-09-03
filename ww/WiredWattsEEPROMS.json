@@ -57,7 +57,7 @@
         "K8-Pi": {
             "description": "8 Output String Cape",
             "versions": {
-                "2.0": {
+                "Hardware Version 2.0 / EEPROM 2.0.1": {
                     "url": "https://wiredwatts.com/firmwares/K8-Pi/K8-Pi-2.0-eeprom.bin"
                 }
             },
