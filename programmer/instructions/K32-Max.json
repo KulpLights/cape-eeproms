@@ -58,7 +58,7 @@
             "action": "flashMSPM0",
             "nrst": "pca9675-0",
             "binvoke": "pca9675-2",
-            "firmware": "mspm0-adc.txt",
+            "firmware": "%PROGRAMMER%/mspm0-adc.txt",
             "skipVendorImage": true,
             "message": "Flash MSPM0-2",
             "i2cDev": "0x29"
@@ -72,7 +72,7 @@
             "nrst": "pca9675-0",
             "binvoke": "pca9675-1",
             "eeprom": "/tmp/eeprom.bin",
-            "firmware": "mspm0-adc-eeprom.txt",
+            "firmware": "%PROGRAMMER%/mspm0-adc-eeprom.txt",
             "skipVendorImage": false,
             "message": "Flash MSPM0-1",
             "i2cDev": "0x50"

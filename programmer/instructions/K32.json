@@ -47,7 +47,7 @@
             "nrst": "pca9674-0",
             "binvoke": "pca9674-1",
             "eeprom": "/tmp/eeprom.bin",
-            "firmware": "mspm0-adc-eeprom.txt",
+            "firmware": "%PROGRAMMER%/mspm0-adc-eeprom.txt",
             "skipVendorImage": false,
             "message": "Flash MSPM0",
             "i2cDev": "0x50"
