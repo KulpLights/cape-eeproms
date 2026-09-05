@@ -1,0 +1,188 @@
+{
+    "BBB-OLED": {
+        "default": "2.0",
+        "mspm0": false,
+        "versions": [
+            "1.0",
+            "2.0"
+        ]
+    },
+    "K2-Pi-Servo": {
+        "default": "1.0",
+        "mspm0": false,
+        "versions": [
+            "1.0"
+        ]
+    },
+    "K2-Pi0": {
+        "default": "1.0",
+        "mspm0": false,
+        "versions": [
+            "1.0"
+        ]
+    },
+    "K4-PB": {
+        "default": "3.0",
+        "mspm0": false,
+        "versions": [
+            "1.0-W",
+            "1.0-Y",
+            "2.0-W",
+            "2.0-Y",
+            "2.1-W",
+            "2.2-W",
+            "2.2-Y",
+            "3.0"
+        ]
+    },
+    "K8-B": {
+        "default": "4.3",
+        "mspm0": false,
+        "versions": [
+            "4.0-W",
+            "4.0-Y",
+            "4.2-W",
+            "4.2-Y",
+            "4.3"
+        ]
+    },
+    "K8-B-Scroller": {
+        "default": "1.1",
+        "mspm0": false,
+        "versions": [
+            "1.0",
+            "1.1"
+        ]
+    },
+    "K8-Max": {
+        "default": "4.0",
+        "mspm0": true,
+        "versions": [
+            "4.0"
+        ]
+    },
+    "K8-PB": {
+        "default": "2.6",
+        "mspm0": true,
+        "versions": [
+            "2.0",
+            "2.5",
+            "2.6"
+        ]
+    },
+    "K8-Pi": {
+        "default": "2.0",
+        "mspm0": false,
+        "versions": [
+            "1.0",
+            "2.0"
+        ]
+    },
+    "K8-Pro": {
+        "default": "4.0",
+        "mspm0": true,
+        "versions": [
+            "4.0"
+        ]
+    },
+    "K16": {
+        "default": "4.0",
+        "mspm0": true,
+        "versions": [
+            "4.0"
+        ]
+    },
+    "K16-Max": {
+        "default": "4.0",
+        "mspm0": true,
+        "versions": [
+            "4.0"
+        ]
+    },
+    "K16-Pro": {
+        "default": "4.1",
+        "mspm0": true,
+        "versions": [
+            "4.0",
+            "4.1"
+        ]
+    },
+    "K32": {
+        "default": "4.0",
+        "mspm0": true,
+        "versions": [
+            "4.0"
+        ]
+    },
+    "K32-Max": {
+        "default": "4.1",
+        "mspm0": true,
+        "versions": [
+            "4.0",
+            "4.1"
+        ]
+    },
+    "K32-Pro": {
+        "default": "4.0",
+        "mspm0": true,
+        "versions": [
+            "4.0"
+        ]
+    },
+    "K40D-PB": {
+        "default": "3.0",
+        "mspm0": false,
+        "versions": [
+            "2.0",
+            "3.0"
+        ]
+    },
+    "K64D-B": {
+        "default": "1.0",
+        "mspm0": false,
+        "versions": [
+            "1.0"
+        ]
+    },
+    "K128D-B": {
+        "default": "1.1",
+        "mspm0": false,
+        "versions": [
+            "1.0-W",
+            "1.0-Y",
+            "1.1"
+        ]
+    },
+    "Pi-OLED": {
+        "default": "2.0",
+        "mspm0": false,
+        "versions": [
+            "1.0-W",
+            "1.0-Y",
+            "1.3-W",
+            "1.3-Y",
+            "2.0"
+        ]
+    },
+    "PocketScroller": {
+        "default": "1.2",
+        "mspm0": false,
+        "versions": [
+            "1.2"
+        ]
+    },
+    "PocketScroller16": {
+        "default": "3.0",
+        "mspm0": true,
+        "versions": [
+            "3.0"
+        ]
+    },
+    "PocketScrollerV3": {
+        "default": "3.0",
+        "mspm0": true,
+        "versions": [
+            "3.0"
+        ]
+    }
+}
