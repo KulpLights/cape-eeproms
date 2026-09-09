@@ -1,3 +1,6 @@
 programmer/vendor-image.dat
 programmer/serialNumbers.txt
 programmer/programmer-config.json
+# A reseller's own serial-number script: their format, their key, their
+# database.  Never published, so an update of this tree cannot clobber it.
+programmer/*.local
