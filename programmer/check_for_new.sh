@@ -118,6 +118,46 @@ else
     echo "check_for_new: ${REPO_URL} is not reachable yet"
 fi
 
+# Set the clock before anything else uses it.
+#
+# The cape RTC is on i2c1 and only comes up when the programmer itself starts -
+# after this script - so at this point the time is whatever the board powered on
+# with: 1999 on one rig, a fixed stale 2024 date on another.  Everything
+# downstream suffers for it.  Certificates read as not yet valid, every file the
+# pull writes gets a bogus mtime, and the journal entries land outside the
+# boot's own time range, so `journalctl -b` cannot show what this script did.
+#
+# There is no NTP answer available yet either: chrony is running but cannot
+# select a source while the offset is decades, so `chronyc makestep` has nothing
+# to step to.  What we do have is an HTTP response from a host we just reached,
+# and its Date header is good to the second - ample for validating a
+# certificate and for making a log readable.  chrony refines it from there.
+sync_clock_from_server() {
+    [ "$ONLINE" = "1" ] || return 0
+    local hdr srv now delta
+    hdr="$(curl -fsSI "${CURL_INSECURE[@]}" --connect-timeout 10 --max-time 20 "$REPO_URL" 2>/dev/null \
+           | tr -d '\r' | awk 'tolower($1) == "date:" { sub(/^[^:]*: /, ""); print; exit }')"
+    [ -n "$hdr" ] || return 0
+    srv="$(date -u -d "$hdr" +%s 2>/dev/null)" || return 0
+    [ -n "$srv" ] || return 0
+    now="$(date -u +%s)"
+    delta=$(( srv > now ? srv - now : now - srv ))
+    # Leave a clock that is already close alone; chrony keeps it far better than
+    # a header with one-second resolution can.
+    [ "$delta" -gt 60 ] || return 0
+    echo "check_for_new: clock is off by ${delta}s (reads $(date '+%Y-%m-%d %H:%M:%S')) - setting it from the server"
+    date -u -s "@${srv}" >/dev/null 2>&1 || return 0
+    hwclock -w >/dev/null 2>&1
+    # Now that the offset is small, chrony can select a source and take over.
+    chronyc makestep >/dev/null 2>&1
+    echo "check_for_new: clock set to $(date '+%Y-%m-%d %H:%M:%S')"
+    # A wrong clock is the usual reason verification failed above.  Now that it
+    # is right, give TLS another chance rather than downloading the binary over
+    # an unverified connection for the rest of the run.
+    CURL_INSECURE=()
+}
+sync_clock_from_server
+
 SELF="${BASH_SOURCE[0]:-$0}"
 SELF_SUM_BEFORE="$(sha256sum "$SELF" 2>/dev/null | cut -d' ' -f1)"
 
