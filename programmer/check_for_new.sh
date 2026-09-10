@@ -58,6 +58,15 @@ else
 fi
 
 
+# The pull can update THIS FILE, and bash reads a script incrementally from a
+# file offset rather than slurping it: rewrite the file under a running shell
+# and the interpreter resumes at a byte offset that now lands mid-token, then
+# quietly stops.  Everything below the pull silently does not happen, with no
+# error anywhere.  So note what the script looked like before, and if the pull
+# changed it, re-exec so the rest runs from the version we just fetched.
+SELF="${BASH_SOURCE[0]:-$0}"
+SELF_SUM_BEFORE="$(sha256sum "$SELF" 2>/dev/null | cut -d' ' -f1)"
+
 if [ "$ONLINE" = "1" ]; then
     for i in {1..10}; do
         sudo -u fpp git -c http.sslVerify=false pull -f --rebase
@@ -66,6 +75,16 @@ if [ "$ONLINE" = "1" ]; then
         fi
         sleep 2
     done
+fi
+
+# KPROG_REEXECED bounds this to a single re-exec: a script that somehow differs
+# from itself every run would otherwise loop here forever and the programmer
+# would never start.
+if [ -z "${KPROG_REEXECED:-}" ] \
+   && [ "$(sha256sum "$SELF" 2>/dev/null | cut -d' ' -f1)" != "$SELF_SUM_BEFORE" ]; then
+    echo "check_for_new: the pull updated this script; restarting it"
+    export KPROG_REEXECED=1
+    exec "$SELF" "$@"
 fi
 
 
