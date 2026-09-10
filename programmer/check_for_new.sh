@@ -44,13 +44,36 @@ fi
 REPO_URL="${KLPROG_REPO_URL:-https://github.com/KulpLights/cape-eeproms}"
 FPPDIR="${FPPDIR:-/opt/fpp}"
 
+# A rig gets its clock from the cape's RTC, so a bench rig with no board on it -
+# or a dead cell - comes up in 1999 and every certificate reads as not yet
+# valid: curl fails with rc 60 and the box looks offline when it is not.  That
+# is why the pull below already passes http.sslVerify=false.  Try verified
+# first and fall back only on a certificate error, so a rig with a good clock
+# keeps a verified channel and one with a bad clock still updates.  Integrity
+# of the binary itself does not rest on TLS either way - it is checked against
+# the published sha256 below.
+CURL_INSECURE=()
+curl_get() {  # curl_get <outfile> <url> [extra curl args...]
+    local out="$1" url="$2"; shift 2
+    local rc
+    curl -fsSL "${CURL_INSECURE[@]}" --connect-timeout 10 "$@" -o "$out" "$url" && return 0
+    rc=$?
+    # 60 unverifiable cert, 35 TLS handshake, 77 CA bundle unreadable.
+    if [ ${#CURL_INSECURE[@]} -eq 0 ] && { [ $rc -eq 60 ] || [ $rc -eq 35 ] || [ $rc -eq 77 ]; }; then
+        echo "check_for_new: TLS verification failed (curl $rc) with the clock at $(date '+%Y-%m-%d'); continuing unverified"
+        CURL_INSECURE=(-k)
+        curl -fsSL "${CURL_INSECURE[@]}" --connect-timeout 10 "$@" -o "$out" "$url" && return 0
+        rc=$?
+    fi
+    return $rc
+}
+
 # One cheap probe up front rather than letting git and curl each discover it the
 # slow way.  Offline, the retry loop below would spend its ten attempts and the
 # download its own retries, all to arrive where we already are: use what is on
 # disk.  git's smart-http discovery endpoint is the same host and path the pull
 # needs, so this tests what actually has to work.
-if curl -sf --connect-timeout 5 --max-time 15 -o /dev/null \
-        "${REPO_URL}/info/refs?service=git-upload-pack"; then
+if curl_get /dev/null "${REPO_URL}/info/refs?service=git-upload-pack" --max-time 15; then
     ONLINE=1
 else
     ONLINE=0
@@ -166,12 +189,12 @@ trap 'rm -f "$TMP" "${TMP%.gz}" "$SUMS"' EXIT
 # mismatched pair; one re-fetch of both resolves that.
 VERIFY="pending"
 for ATTEMPT in 1 2; do
-    if ! curl -fSL --retry 3 --connect-timeout 10 --max-time 300 -o "$TMP" "$URL"; then
+    if ! curl_get "$TMP" "$URL" --retry 3 --max-time 300; then
         echo "check_for_new: ERROR downloading ${URL}" >&2
         echo "check_for_new: no rig binary published for ${PLAT} on FPP ${MAJ}." >&2
         exit 0
     fi
-    if ! curl -fsL --retry 3 --connect-timeout 10 --max-time 60 -o "$SUMS" "$SUMSURL"; then VERIFY="no-checksums"; break; fi
+    if ! curl_get "$SUMS" "$SUMSURL" --retry 3 --max-time 60; then VERIFY="no-checksums"; break; fi
     EXPECTED="$(awk -v a="$ASSET" '$2 == a { print tolower($1); exit }' "$SUMS")"
     if [ -z "$EXPECTED" ]; then VERIFY="unlisted"; break; fi
     ACTUAL="$(sha256sum "$TMP" | cut -d' ' -f1)"
