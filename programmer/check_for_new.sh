@@ -69,68 +69,49 @@ curl_get() {  # curl_get <outfile> <url> [extra curl args...]
 }
 
 # One probe up front rather than letting git and curl each discover it the slow
-# way.  Offline, the retry loop below would spend its ten attempts and the
+# way.  Offline, the pull's retry loop would spend its ten attempts and the
 # download its own retries, all to arrive where we already are: use what is on
 # disk.  git's smart-http discovery endpoint is the same host and path the pull
 # needs, so this tests what actually has to work.
-#
-# But it cannot be a single shot.  FPP's images enable no wait-online service,
-# so network-online.target is empty and the unit's After= on it is satisfied
-# immediately: this script runs while the interface is still coming up.
-# Observed on a cold boot resolving nothing three seconds before DNS was ready,
-# which made a perfectly online rig take the offline path and never fetch its
-# binary.  So give the network a bounded window to appear -- but only when a
-# cable is actually plugged in, so a rig on a bench with nothing attached is not
-# made to sit out the whole wait on every boot.
-#
-# Carrier is the right signal and a default route is NOT: at the point this
-# runs, DHCP has often not answered yet, so "no route" is every bit as
-# transient as "no DNS" and treating it as proof of an offline box bails out on
-# exactly the boots this wait exists for.  Carrier says a cable is in, which is
-# what actually distinguishes the two.
-link_present() {
-    local i
-    for i in /sys/class/net/*; do
-        [ "$(basename "$i")" = "lo" ] && continue
-        [ "$(cat "$i/carrier" 2>/dev/null)" = "1" ] && return 0
-    done
-    # A global address counts too: wifi reports no carrier while associating,
-    # and a static setup can be configured before any link event.
-    ip -4 addr show scope global 2>/dev/null | grep -q 'inet '
+probe_online() {
+    curl_get /dev/null "${REPO_URL}/info/refs?service=git-upload-pack" --max-time 15
 }
 
-ONLINE=0
-NET_WAIT_UNTIL=$(( SECONDS + 30 ))
-WAITED=0
-while : ; do
-    if curl_get /dev/null "${REPO_URL}/info/refs?service=git-upload-pack" --max-time 15; then
-        ONLINE=1
-        [ "$WAITED" = "1" ] && echo "check_for_new: network came up after ${SECONDS}s"
-        break
-    fi
-    if ! link_present; then
-        echo "check_for_new: no network link - not waiting for one"
-        break
-    fi
-    if [ "$SECONDS" -ge "$NET_WAIT_UNTIL" ]; then
-        echo "check_for_new: network still not usable after ${SECONDS}s - giving up"
-        break
-    fi
-    [ "$WAITED" = "0" ] && echo "check_for_new: network is not ready yet; waiting for it"
-    WAITED=1
-    sleep 3
-done
-if [ "$ONLINE" != "1" ]; then
-    echo "check_for_new: ${REPO_URL} is unreachable - using the eeproms and binaries already on disk"
+# FPP's images enable no wait-online service, so network-online.target is empty
+# and this unit's After= on it is satisfied at once: the script runs while the
+# interface is still coming up, and a cold boot reliably probes before DNS
+# answers.  Waiting here for every rig would delay each boot of an offline one,
+# and guessing from carrier or from a default route does not work - at this
+# point in the boot both are as absent as DNS is, which is how two earlier
+# attempts at this bailed out on precisely the boots they were written for.
+#
+# So do not decide up front.  Probe once, get on with it, and wait for the
+# network only at the one place where being offline is fatal rather than
+# merely unhelpful: needing a binary and not having one.  A rig that already
+# has a working programmer never waits at all.
+wait_for_network() {
+    local until=$(( SECONDS + ${1:-90} ))
+    echo "check_for_new: no usable programmer on disk - waiting up to ${1:-90}s for the network"
+    while [ "$SECONDS" -lt "$until" ]; do
+        sleep 3
+        # Quiet: an interface that is still coming up would otherwise log a
+        # "could not resolve" line every three seconds for the whole wait.
+        if probe_online 2>/dev/null; then
+            echo "check_for_new: network came up after ${SECONDS}s"
+            return 0
+        fi
+    done
+    echo "check_for_new: still no network after ${SECONDS}s"
+    return 1
+}
+
+if probe_online; then
+    ONLINE=1
+else
+    ONLINE=0
+    echo "check_for_new: ${REPO_URL} is not reachable yet"
 fi
 
-
-# The pull can update THIS FILE, and bash reads a script incrementally from a
-# file offset rather than slurping it: rewrite the file under a running shell
-# and the interpreter resumes at a byte offset that now lands mid-token, then
-# quietly stops.  Everything below the pull silently does not happen, with no
-# error anywhere.  So note what the script looked like before, and if the pull
-# changed it, re-exec so the rest runs from the version we just fetched.
 SELF="${BASH_SOURCE[0]:-$0}"
 SELF_SUM_BEFORE="$(sha256sum "$SELF" 2>/dev/null | cut -d' ' -f1)"
 
@@ -212,9 +193,15 @@ if loads "$TARGET" && [ "$(cat "$MARKER" 2>/dev/null)" = "${PLAT}-${MAJ}" ]; the
     exit 0
 fi
 
+# This is the fatal case: nothing on disk that runs, so without a download the
+# programmer cannot start at all.  Only here is it worth waiting out a network
+# that is still coming up.
+if [ "$ONLINE" != "1" ] && wait_for_network 90; then
+    ONLINE=1
+fi
 if [ "$ONLINE" != "1" ]; then
-    # Nothing usable on disk and no way to fetch one.  Say so plainly: the
-    # programmer is about to exit 127 and that message alone explains nothing.
+    # Say so plainly: the programmer is about to exit 127, and that message
+    # alone explains nothing.
     echo "check_for_new: no ${PLAT} programmer for FPP ${MAJ} on disk and no network to fetch one." >&2
     echo "check_for_new: connect this rig to the network once to install it." >&2
     exit 0
