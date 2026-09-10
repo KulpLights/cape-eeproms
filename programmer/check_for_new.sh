@@ -111,10 +111,25 @@ wait_for_network() {
     return 1
 }
 
-if probe_online; then
-    ONLINE=1
-else
-    ONLINE=0
+# A short grace period, unconditionally.  On a cold boot the first probe
+# essentially always fails -- FPP enables no wait-online service, so this runs
+# before DNS answers -- and everything that needs the network hangs off this
+# answer: the pull, and the clock sync below.  Probing once meant a rig whose
+# committed binary happens to load never pulled at all on a cold boot.  The
+# script this replaced retried its pull ten times at two-second intervals, so a
+# grace period of this order is what rigs have always effectively had; it is
+# only the earlier bail-out-on-first-miss that was new.  The much longer wait
+# further down still exists for the case where being offline is fatal.
+ONLINE=0
+for attempt in 1 2 3 4 5 6 7; do
+    if probe_online 2>/dev/null; then
+        ONLINE=1
+        [ "$attempt" -gt 1 ] && echo "check_for_new: network came up after $(( (attempt - 1) * 3 ))s"
+        break
+    fi
+    [ "$attempt" -lt 7 ] && sleep 3
+done
+if [ "$ONLINE" != "1" ]; then
     echo "check_for_new: ${REPO_URL} is not reachable yet"
 fi
 
