@@ -79,9 +79,26 @@ curl_get() {  # curl_get <outfile> <url> [extra curl args...]
 # immediately: this script runs while the interface is still coming up.
 # Observed on a cold boot resolving nothing three seconds before DNS was ready,
 # which made a perfectly online rig take the offline path and never fetch its
-# binary.  So give the network a bounded window to appear -- but only when
-# there is a default route, so a rig on a bench with no cable is not made to
-# sit out the whole wait on every boot.
+# binary.  So give the network a bounded window to appear -- but only when a
+# cable is actually plugged in, so a rig on a bench with nothing attached is not
+# made to sit out the whole wait on every boot.
+#
+# Carrier is the right signal and a default route is NOT: at the point this
+# runs, DHCP has often not answered yet, so "no route" is every bit as
+# transient as "no DNS" and treating it as proof of an offline box bails out on
+# exactly the boots this wait exists for.  Carrier says a cable is in, which is
+# what actually distinguishes the two.
+link_present() {
+    local i
+    for i in /sys/class/net/*; do
+        [ "$(basename "$i")" = "lo" ] && continue
+        [ "$(cat "$i/carrier" 2>/dev/null)" = "1" ] && return 0
+    done
+    # A global address counts too: wifi reports no carrier while associating,
+    # and a static setup can be configured before any link event.
+    ip -4 addr show scope global 2>/dev/null | grep -q 'inet '
+}
+
 ONLINE=0
 NET_WAIT_UNTIL=$(( SECONDS + 30 ))
 WAITED=0
@@ -91,8 +108,8 @@ while : ; do
         [ "$WAITED" = "1" ] && echo "check_for_new: network came up after ${SECONDS}s"
         break
     fi
-    if ! ip route show default 2>/dev/null | grep -q .; then
-        echo "check_for_new: no default route - not waiting for a network"
+    if ! link_present; then
+        echo "check_for_new: no network link - not waiting for one"
         break
     fi
     if [ "$SECONDS" -ge "$NET_WAIT_UNTIL" ]; then
