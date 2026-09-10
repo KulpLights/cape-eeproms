@@ -143,6 +143,49 @@ fi
 
 
 #############################################################################
+# The unit file this script is the ExecStartPre of.
+#
+# A pull ships programmer/kprogrammer.service, but systemd reads the copy under
+# /usr/lib (or /etc), so an update that changes the unit reaches nothing until
+# someone copies it by hand.  That matters here because ExecStart moved to
+# start-programmer.sh: without this, a rig would pull the launcher, fetch
+# programmer.local, and then go on running the committed binary directly and
+# ignoring both.
+#############################################################################
+UNIT_SRC="${BASEDIR}/kprogrammer.service"
+UNIT_DST="$(systemctl show -p FragmentPath --value kprogrammer.service 2>/dev/null)"
+UNIT_CHANGED=0
+if [ -f "$UNIT_SRC" ] && [ -n "$UNIT_DST" ] && [ -f "$UNIT_DST" ] \
+   && ! cmp -s "$UNIT_SRC" "$UNIT_DST"; then
+    if cp -f "$UNIT_SRC" "$UNIT_DST" 2>/dev/null; then
+        echo "check_for_new: updated ${UNIT_DST}"
+        systemctl daemon-reload
+        UNIT_CHANGED=1
+    else
+        echo "check_for_new: could not write ${UNIT_DST}" >&2
+    fi
+fi
+
+
+# A daemon-reload does not re-resolve ExecStart for the invocation that is
+# already starting, so on the one boot where the unit changes systemd still
+# launches the old ExecStart - the committed binary, i.e. precisely the thing
+# that does not load on this rig.  Schedule a detached restart so that boot
+# recovers rather than waiting for the next one.  systemd-run is what makes it
+# safe: it outlives the service, where a "systemctl restart" run from inside
+# this unit's own ExecStartPre would deadlock against it.  Bounded by
+# construction - once the unit matches, UNIT_CHANGED is 0 and nothing is
+# scheduled again.
+schedule_restart_if_unit_changed() {
+    [ "$UNIT_CHANGED" = "1" ] || return 0
+    command -v systemd-run >/dev/null 2>&1 || return 0
+    echo "check_for_new: the unit changed - restarting so the new ExecStart takes effect"
+    systemd-run --quiet --on-active=2 --unit=kprogrammer-unit-refresh \
+        systemctl restart kprogrammer.service >/dev/null 2>&1 || true
+}
+
+
+#############################################################################
 # A binary that loads on this box.
 #############################################################################
 TARGET="${BASEDIR}/programmer.local"     # gitignored, so a pull cannot clobber it
@@ -196,6 +239,7 @@ fi
 
 if loads "$TARGET" && [ "$(cat "$MARKER" 2>/dev/null)" = "${PLAT}-${MAJ}" ]; then
     echo "check_for_new: ${PLAT} programmer for FPP ${MAJ} already installed"
+    schedule_restart_if_unit_changed
     exit 0
 fi
 
@@ -258,4 +302,5 @@ chmod 755 "${TMP%.gz}"
 mv -f "${TMP%.gz}" "$TARGET"
 echo "${PLAT}-${MAJ}" > "$MARKER"
 echo "check_for_new: installed the ${PLAT} programmer for FPP ${MAJ}"
+schedule_restart_if_unit_changed
 exit 0
