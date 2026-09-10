@@ -89,19 +89,25 @@ probe_online() {
 # network only at the one place where being offline is fatal rather than
 # merely unhelpful: needing a binary and not having one.  A rig that already
 # has a working programmer never waits at all.
+# Counts its own sleeps rather than reading the clock.  SECONDS follows wall
+# time, and wall time on these rigs is not monotonic: the clock starts in 1999
+# and chrony steps it 26 years forward partway through exactly this wait, which
+# ends the loop on the spot and reported "network came up after 1928011s".  A
+# backwards step would hang it for as long again.
 wait_for_network() {
-    local until=$(( SECONDS + ${1:-90} ))
-    echo "check_for_new: no usable programmer on disk - waiting up to ${1:-90}s for the network"
-    while [ "$SECONDS" -lt "$until" ]; do
-        sleep 3
+    local limit="${1:-90}" step=3 waited=0
+    echo "check_for_new: no usable programmer on disk - waiting up to ${limit}s for the network"
+    while [ "$waited" -lt "$limit" ]; do
+        sleep "$step"
+        waited=$(( waited + step ))
         # Quiet: an interface that is still coming up would otherwise log a
         # "could not resolve" line every three seconds for the whole wait.
         if probe_online 2>/dev/null; then
-            echo "check_for_new: network came up after ${SECONDS}s"
+            echo "check_for_new: network came up after ${waited}s"
             return 0
         fi
     done
-    echo "check_for_new: still no network after ${SECONDS}s"
+    echo "check_for_new: still no network after ${waited}s"
     return 1
 }
 
