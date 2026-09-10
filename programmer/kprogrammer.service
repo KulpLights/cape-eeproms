@@ -7,7 +7,7 @@ Wants=network.target network-online.target  home-fpp-media.mount
 [Service]
 WorkingDirectory=/home/fpp/media/cape-eeproms/programmer
 ExecStartPre=/home/fpp/media/cape-eeproms/programmer/check_for_new.sh
-ExecStart=/home/fpp/media/cape-eeproms/programmer/programmer
+ExecStart=/home/fpp/media/cape-eeproms/programmer/start-programmer.sh
 Type=simple
 
 [Install]

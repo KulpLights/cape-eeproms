@@ -4,3 +4,8 @@ programmer/programmer-config.json
 # A reseller's own serial-number script: their format, their key, their
 # database.  Never published, so an update of this tree cannot clobber it.
 programmer/*.local
+
+# The rig-specific programmer build check_for_new.sh fetches when the committed
+# one will not load on this FPP major, and the marker recording which it is.
+programmer/.programmer-major
+programmer/.programmer.*.gz
