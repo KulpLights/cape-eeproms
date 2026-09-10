@@ -68,15 +68,42 @@ curl_get() {  # curl_get <outfile> <url> [extra curl args...]
     return $rc
 }
 
-# One cheap probe up front rather than letting git and curl each discover it the
-# slow way.  Offline, the retry loop below would spend its ten attempts and the
+# One probe up front rather than letting git and curl each discover it the slow
+# way.  Offline, the retry loop below would spend its ten attempts and the
 # download its own retries, all to arrive where we already are: use what is on
 # disk.  git's smart-http discovery endpoint is the same host and path the pull
 # needs, so this tests what actually has to work.
-if curl_get /dev/null "${REPO_URL}/info/refs?service=git-upload-pack" --max-time 15; then
-    ONLINE=1
-else
-    ONLINE=0
+#
+# But it cannot be a single shot.  FPP's images enable no wait-online service,
+# so network-online.target is empty and the unit's After= on it is satisfied
+# immediately: this script runs while the interface is still coming up.
+# Observed on a cold boot resolving nothing three seconds before DNS was ready,
+# which made a perfectly online rig take the offline path and never fetch its
+# binary.  So give the network a bounded window to appear -- but only when
+# there is a default route, so a rig on a bench with no cable is not made to
+# sit out the whole wait on every boot.
+ONLINE=0
+NET_WAIT_UNTIL=$(( SECONDS + 30 ))
+WAITED=0
+while : ; do
+    if curl_get /dev/null "${REPO_URL}/info/refs?service=git-upload-pack" --max-time 15; then
+        ONLINE=1
+        [ "$WAITED" = "1" ] && echo "check_for_new: network came up after ${SECONDS}s"
+        break
+    fi
+    if ! ip route show default 2>/dev/null | grep -q .; then
+        echo "check_for_new: no default route - not waiting for a network"
+        break
+    fi
+    if [ "$SECONDS" -ge "$NET_WAIT_UNTIL" ]; then
+        echo "check_for_new: network still not usable after ${SECONDS}s - giving up"
+        break
+    fi
+    [ "$WAITED" = "0" ] && echo "check_for_new: network is not ready yet; waiting for it"
+    WAITED=1
+    sleep 3
+done
+if [ "$ONLINE" != "1" ]; then
     echo "check_for_new: ${REPO_URL} is unreachable - using the eeproms and binaries already on disk"
 fi
 
