@@ -5,7 +5,8 @@ programmer/programmer-config.json
 # database.  Never published, so an update of this tree cannot clobber it.
 programmer/*.local
 
-# The rig-specific programmer build check_for_new.sh fetches when the committed
-# one will not load on this FPP major, and the marker recording which it is.
+# The programmer build check_for_new.sh fetches from CI for this platform and
+# FPP major, the marker recording which asset it is, and its download temp.
+programmer/.programmer-installed
 programmer/.programmer-major
 programmer/.programmer.*.gz

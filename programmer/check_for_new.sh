@@ -4,8 +4,9 @@
 # programmer starts.
 #
 #  1. Copy anything staged on the SD card into place.
-#  2. Pull this repo (eeprom images, instructions, the shipped binary).
-#  3. Make sure there is a programmer binary that actually RUNS on this box.
+#  2. Pull this repo (eeprom images, instructions).
+#  3. Install the programmer binary CI published for this platform and FPP
+#     major, if it is newer than the one installed.
 #
 # Steps 2 and 3 are best effort.  A rig is often on a bench with no route out,
 # and it still has to program boards there, so every network step is gated on a
@@ -13,13 +14,15 @@
 # alone and exits 0.  This script must never be the reason the programmer does
 # not start.
 #
-# Step 3 exists because the `programmer` committed here is a single build, and
-# the libraries it links change soname between the Debian releases the FPP
-# majors are built on (libgpiodcxx.so.1 -> .so.2, libjsoncpp.so.25 -> .26).  A
-# rig on a different FPP major than the committed binary was built for dies at
-# exec with status 127 and an unreadable "cannot open shared object file".  So
-# when the committed binary will not load, fetch the one CI published for this
-# platform and FPP major and run that instead.
+# Step 3 is how the binary reaches a rig.  The programmer source is not in this
+# repo; its CI builds it inside each FPP image's rootfs and publishes the result
+# here as a release asset per platform and FPP major, because the libraries it
+# links change soname between the Debian releases the FPP majors are built on
+# (libgpiodcxx.so.1 -> .so.2, libjsoncpp.so.25 -> .26).  Every boot with a
+# network compares the published checksum against what is installed and
+# downloads only on a change, so a rig follows CI without anyone committing a
+# binary.  The `programmer` still committed here is a last resort for a rig
+# that has never been online, and only runs if it happens to load on this OS.
 #############################################################################
 
 BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
@@ -241,32 +244,33 @@ schedule_restart_if_unit_changed() {
 
 
 #############################################################################
-# A binary that loads on this box.
+# The programmer binary.
+#
+# start-programmer.sh runs programmer.local when it exists and the committed
+# `programmer` otherwise.  programmer.local is what CI published for this
+# platform and FPP major; .programmer-installed records which asset that was
+# ("<PLAT>-<MAJ> <sha256 of the .gz>") so a boot can tell from checksums.txt
+# alone whether there is anything new, without downloading the binary to find
+# out.
 #############################################################################
 TARGET="${BASEDIR}/programmer.local"     # gitignored, so a pull cannot clobber it
-MARKER="${BASEDIR}/.programmer-major"
+MARKER="${BASEDIR}/.programmer-installed"
+COMMITTED="${BASEDIR}/programmer"
+rm -f "${BASEDIR}/.programmer-major"     # the marker an earlier version of this script kept
 
 # A binary "runs" if the dynamic loader can resolve everything it needs.  This
-# is the exact condition that fails, so testing it directly avoids executing the
-# programmer (which would grab the OLED and the i2c bus) just to find out.
-# ldd's exit status matters as much as its output: a binary for the wrong
-# architecture entirely reports "not a dynamic executable" and exits non-zero,
-# with no "not found" line to grep for, so a pipeline into grep alone would call
-# it loadable.
+# is the exact condition that fails across FPP majors, so testing it directly
+# avoids executing the programmer (which would grab the OLED and the i2c bus)
+# just to find out.  ldd's exit status matters as much as its output: a binary
+# for the wrong architecture entirely reports "not a dynamic executable" and
+# exits non-zero, with no "not found" line to grep for, so a pipeline into grep
+# alone would call it loadable.
 loads() {
     local out
     [ -x "$1" ] || return 1
     out="$(ldd "$1" 2>&1)" || return 1
     ! grep -q "not found" <<<"$out"
 }
-
-if loads "${BASEDIR}/programmer"; then
-    # The committed binary is right for this OS - nothing to fetch, and an
-    # override left over from a previous image would only mask it.
-    rm -f "${TARGET}" "${MARKER}"
-    exit 0
-fi
-echo "check_for_new: the committed programmer does not load on this FPP"
 
 # `uname -m` is NOT reliable for the userspace bitness: a 64-bit kernel under a
 # 32-bit FPP reports aarch64.  Read the ELF class of an FPP binary instead -
@@ -289,26 +293,7 @@ if fpp_is_64bit; then PLAT="BB64"; else PLAT="BBB"; fi
 MAJ="$(grep -oE 'FPP_MAJOR_VERSION[[:space:]]+[0-9]+' "${FPPDIR}/src/fppversion_defines.h" 2>/dev/null | grep -oE '[0-9]+$')"
 if [ -z "$MAJ" ]; then
     echo "check_for_new: cannot determine the FPP major version; leaving the binary alone" >&2
-    exit 0
-fi
-
-if loads "$TARGET" && [ "$(cat "$MARKER" 2>/dev/null)" = "${PLAT}-${MAJ}" ]; then
-    echo "check_for_new: ${PLAT} programmer for FPP ${MAJ} already installed"
     schedule_restart_if_unit_changed
-    exit 0
-fi
-
-# This is the fatal case: nothing on disk that runs, so without a download the
-# programmer cannot start at all.  Only here is it worth waiting out a network
-# that is still coming up.
-if [ "$ONLINE" != "1" ] && wait_for_network 90; then
-    ONLINE=1
-fi
-if [ "$ONLINE" != "1" ]; then
-    # Say so plainly: the programmer is about to exit 127, and that message
-    # alone explains nothing.
-    echo "check_for_new: no ${PLAT} programmer for FPP ${MAJ} on disk and no network to fetch one." >&2
-    echo "check_for_new: connect this rig to the network once to install it." >&2
     exit 0
 fi
 
@@ -316,9 +301,58 @@ ASSET="kl-programmer-oled-${PLAT}-${MAJ}.gz"
 URL="${REPO_URL}/releases/download/fpp${MAJ}/${ASSET}"
 SUMSURL="${REPO_URL}/releases/download/fpp${MAJ}/checksums.txt"
 
+# What is installed, if it still runs.  The marker's platform/major half goes
+# stale when a rig's card is reimaged onto another FPP major: the binary then
+# fails to load and is replaced, which is what the check below produces too.
+INSTALLED=""
+if loads "$TARGET"; then
+    INSTALLED="$(cat "$MARKER" 2>/dev/null)"
+    case "$INSTALLED" in
+        "${PLAT}-${MAJ} "*) INSTALLED="${INSTALLED#* }" ;;   # the sha
+        *) INSTALLED="" ;;
+    esac
+fi
+
+# Where being offline is merely unhelpful versus fatal.  With a binary that
+# runs on disk - the installed one, or failing that the committed one - keep
+# what we have.  With neither, the programmer is about to exit 127, and that
+# is the one place worth waiting out a network that is still coming up.
+have_runnable() {
+    loads "$TARGET" || loads "$COMMITTED"
+}
+if [ "$ONLINE" != "1" ] && ! have_runnable && wait_for_network 90; then
+    ONLINE=1
+fi
+if [ "$ONLINE" != "1" ]; then
+    if loads "$TARGET"; then
+        echo "check_for_new: offline - keeping the installed ${PLAT} programmer for FPP ${MAJ}"
+    elif loads "$COMMITTED"; then
+        echo "check_for_new: offline - no CI programmer installed, using the committed one"
+    else
+        echo "check_for_new: no ${PLAT} programmer for FPP ${MAJ} on disk and no network to fetch one." >&2
+        echo "check_for_new: connect this rig to the network once to install it." >&2
+    fi
+    schedule_restart_if_unit_changed
+    exit 0
+fi
+
 TMP="$(mktemp "${BASEDIR}/.programmer.XXXXXX.gz")"
 SUMS="$(mktemp "${TMPDIR:-/tmp}/kprog.XXXXXX.sums")"
 trap 'rm -f "$TMP" "${TMP%.gz}" "$SUMS"' EXIT
+
+# checksums.txt is a few hundred bytes and names every asset of the release,
+# so it answers "is there anything new" on its own.  Without it (an older
+# release, or a fetch that failed) fall through to downloading the binary and
+# comparing that.
+EXPECTED=""
+if curl_get "$SUMS" "$SUMSURL" --retry 3 --max-time 60; then
+    EXPECTED="$(awk -v a="$ASSET" '$2 == a { print tolower($1); exit }' "$SUMS")"
+    if [ -n "$EXPECTED" ] && [ -n "$INSTALLED" ] && [ "$EXPECTED" = "$INSTALLED" ]; then
+        echo "check_for_new: ${PLAT} programmer for FPP ${MAJ} is current"
+        schedule_restart_if_unit_changed
+        exit 0
+    fi
+fi
 
 # Verify before the download can replace a working binary.  The binaries and
 # checksums.txt are separate assets, so a fetch landing mid-publish can see a
@@ -326,17 +360,30 @@ trap 'rm -f "$TMP" "${TMP%.gz}" "$SUMS"' EXIT
 VERIFY="pending"
 for ATTEMPT in 1 2; do
     if ! curl_get "$TMP" "$URL" --retry 3 --max-time 300; then
-        echo "check_for_new: ERROR downloading ${URL}" >&2
-        echo "check_for_new: no rig binary published for ${PLAT} on FPP ${MAJ}." >&2
+        echo "check_for_new: could not download ${URL}" >&2
+        if loads "$TARGET"; then
+            echo "check_for_new: keeping the installed programmer.local" >&2
+        elif loads "$COMMITTED"; then
+            echo "check_for_new: no rig binary published for ${PLAT} on FPP ${MAJ}; using the committed one" >&2
+        else
+            echo "check_for_new: no rig binary published for ${PLAT} on FPP ${MAJ}." >&2
+        fi
+        schedule_restart_if_unit_changed
         exit 0
     fi
-    if ! curl_get "$SUMS" "$SUMSURL" --retry 3 --max-time 60; then VERIFY="no-checksums"; break; fi
-    EXPECTED="$(awk -v a="$ASSET" '$2 == a { print tolower($1); exit }' "$SUMS")"
-    if [ -z "$EXPECTED" ]; then VERIFY="unlisted"; break; fi
     ACTUAL="$(sha256sum "$TMP" | cut -d' ' -f1)"
+    if [ -z "$EXPECTED" ]; then
+        # Nothing to verify against; the download itself is the only signal.
+        [ -s "$SUMS" ] && VERIFY="unlisted" || VERIFY="no-checksums"
+        break
+    fi
     if [ "$ACTUAL" = "$EXPECTED" ]; then VERIFY="ok"; break; fi
     VERIFY="mismatch"
-    [ "$ATTEMPT" = "1" ] && echo "check_for_new: checksum mismatch, re-fetching ..." >&2
+    if [ "$ATTEMPT" = "1" ]; then
+        echo "check_for_new: checksum mismatch, re-fetching ..." >&2
+        curl_get "$SUMS" "$SUMSURL" --retry 3 --max-time 60 \
+            && EXPECTED="$(awk -v a="$ASSET" '$2 == a { print tolower($1); exit }' "$SUMS")"
+    fi
 done
 case "$VERIFY" in
     ok)           echo "check_for_new: checksum verified for ${ASSET}" ;;
@@ -344,18 +391,39 @@ case "$VERIFY" in
     unlisted)     echo "check_for_new: WARNING: ${ASSET} not listed in checksums.txt" >&2 ;;
     *)
         echo "check_for_new: ERROR: checksum mismatch for ${ASSET}; keeping what is installed." >&2
+        schedule_restart_if_unit_changed
         exit 0
         ;;
 esac
 
+# Only reachable without a checksums.txt answer: the binary had to be fetched
+# to find out whether it changed.
+if [ -n "$INSTALLED" ] && [ "$ACTUAL" = "$INSTALLED" ]; then
+    echo "check_for_new: ${PLAT} programmer for FPP ${MAJ} is current"
+    schedule_restart_if_unit_changed
+    exit 0
+fi
+
 if ! gunzip -f "$TMP"; then
     echo "check_for_new: ERROR decompressing ${ASSET}" >&2
+    schedule_restart_if_unit_changed
     exit 0
 fi
 # mktemp creates 0600 and mv preserves it; the programmer has to be executable.
 chmod 755 "${TMP%.gz}"
+# A published binary that does not load here (built against the wrong image,
+# say) must not replace one that does.
+if ! loads "${TMP%.gz}"; then
+    echo "check_for_new: ERROR: the published ${ASSET} does not load on this FPP; keeping what is installed." >&2
+    schedule_restart_if_unit_changed
+    exit 0
+fi
 mv -f "${TMP%.gz}" "$TARGET"
-echo "${PLAT}-${MAJ}" > "$MARKER"
-echo "check_for_new: installed the ${PLAT} programmer for FPP ${MAJ}"
+echo "${PLAT}-${MAJ} ${ACTUAL}" > "$MARKER"
+if [ -n "$INSTALLED" ]; then
+    echo "check_for_new: updated the ${PLAT} programmer for FPP ${MAJ}"
+else
+    echo "check_for_new: installed the ${PLAT} programmer for FPP ${MAJ}"
+fi
 schedule_restart_if_unit_changed
 exit 0
