@@ -66,11 +66,21 @@
         "K8-Pi": {
             "description": "8 Output String Cape",
             "versions": {
+                "Hardware Version 1.0 / EEPROM 1.0": {
+                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-1.0-eeprom.bin",
+                    "notes": "For FPP 9.x and 10.0"
+                },
                 "Hardware Version 1.0 / EEPROM 1.0.1": {
-                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-1.0-eeprom.bin"
+                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-1.0.1-eeprom.bin",
+                    "notes": "Optimized for FPP 10.1+"
+                },
+                "Hardware Version 2.0 / EEPROM 2.0": {
+                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-2.0-eeprom.bin",
+                    "notes": "For FPP 9.x and 10.0"
                 },
                 "Hardware Version 2.0 / EEPROM 2.0.1": {
-                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-2.0-eeprom.bin"
+                    "url": "https://kulplights.com/firmwares/K8-Pi/K8-Pi-2.0.1-eeprom.bin",
+                    "notes": "Optimized for FPP 10.1+"
                 }
             },
             "location": "eeprom",
@@ -470,8 +480,13 @@
                 "1.3 (Blue/Yellow)": {
                     "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-1.3-Y-eeprom.bin"
                 },
-                "2.0": {
-                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-2.0-eeprom.bin"
+                "Hardware Version 2.0 / EEPROM 2.0": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-2.0-eeprom.bin",
+                    "notes": "For FPP 9.x and 10.0"
+                },
+                "Hardware Version 2.0 / EEPROM 2.0.1": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-2.0.1-eeprom.bin",
+                    "notes": "Optimized for FPP 10.1+"
                 }
             },
             "location": "eeprom",
@@ -499,8 +514,13 @@
         "ShowPlayerTouch": {
             "description": "ShowPlayer Touch",
             "versions": {
-                "1.1": {
-                    "url": "https://kulplights.com/firmwares/ShowPlayerTouch/ShowPlayerTouch-1.1-eeprom.bin"
+                "Hardware Version 1.1 / EEPROM 1.1": {
+                    "url": "https://kulplights.com/firmwares/ShowPlayerTouch/ShowPlayerTouch-1.1-eeprom.bin",
+                    "notes": "For FPP 9.x and 10.0"
+                },
+                "Hardware Version 1.1 / EEPROM 1.1.1": {
+                    "url": "https://kulplights.com/firmwares/ShowPlayerTouch/ShowPlayerTouch-1.1.1-eeprom.bin",
+                    "notes": "Optimized for FPP 10.1+"
                 }
             },
             "location": "eeprom",
