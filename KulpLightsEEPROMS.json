@@ -482,8 +482,13 @@
         "ShowPlayer": {
             "description": "ShowPlayer",
             "versions": {
-                "1.0": {
-                    "url": "https://kulplights.com/firmwares/ShowPlayer/ShowPlayer-1.0-eeprom.bin"
+                "Hardware Version 1.0 / EEPROM 1.0": {
+                    "url": "https://kulplights.com/firmwares/ShowPlayer/ShowPlayer-1.0-eeprom.bin",
+                    "notes": "For FPP 9.x and 10.0"
+                },
+                "Hardware Version 1.0 / EEPROM 1.0.1": {
+                    "url": "https://kulplights.com/firmwares/ShowPlayer/ShowPlayer-1.0.1-eeprom.bin",
+                    "notes": "Optimized for FPP 10.1+"
                 }
             },
             "location": "eeprom",
