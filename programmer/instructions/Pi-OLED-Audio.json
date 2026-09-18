@@ -9,7 +9,7 @@
         {
             "action": "validateI2CDevices",
             "message": "Validate I2C",
-            "comment": "Check to make sure the main I2C devices are present before using any of them",
+            "comment": "Check to make sure the main I2C devices are present before using any of them.  The audio codec at 0x4c is deliberately absent from this list, and should not be added: it is powered from the 5V rail, which the board regulates separately down to a clean 3.3V for the analog section, and the OLED port this board is programmed through does not carry 5V.  The codec is simply unpowered during programming, so probing for it would fail every board rather than catch a fault.",
             "devices": [
                 {
                     "address": "0x51",
@@ -18,10 +18,6 @@
                 {
                     "address": "0x48",
                     "message": "Temperature Sensor"
-                },
-                {
-                    "address": "0x4c",
-                    "message": "Audio"
                 },
                 {
                     "address": "0x50",
