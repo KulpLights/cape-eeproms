@@ -487,6 +487,10 @@
                 "Hardware Version 2.0 / EEPROM 2.0.1": {
                     "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-2.0.1-eeprom.bin",
                     "notes": "Optimized for FPP 10.1+"
+                },
+                "Hardware Version 3.0 / EEPROM 3.0.0": {
+                    "url": "https://kulplights.com/firmwares/Pi-OLED/PiOLED-3.0.0-eeprom.bin",
+                    "notes": "The audio board; requires FPP 10.1+"
                 }
             },
             "location": "eeprom",

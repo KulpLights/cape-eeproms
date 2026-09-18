@@ -167,6 +167,13 @@
             "2.0.1"
         ]
     },
+    "Pi-OLED-Audio": {
+        "default": "3.0.0",
+        "mspm0": false,
+        "versions": [
+            "3.0.0"
+        ]
+    },
     "PocketScroller": {
         "default": "1.2",
         "mspm0": false,
