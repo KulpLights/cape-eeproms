@@ -66,6 +66,10 @@
             "versions": {
                 "1.0": {
                     "url": "https://wiredwatts.com/firmwares/K2-Pi0/K2-Pi0-1.0-eeprom.bin"
+                },
+                "Hardware Version 1.0 / EEPROM 1.0.1": {
+                    "url": "https://wiredwatts.com/firmwares/K2-Pi0/K2-Pi0-1.0.1-eeprom.bin",
+                    "notes": "No longer registers an I/O expander at I2C 0x20 that the board does not have."
                 }
             },
             "location": "eeprom",
