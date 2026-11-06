@@ -88,47 +88,55 @@
         ]
     },
     "K16": {
-        "default": "4.0",
+        "default": "4.0.3",
         "mspm0": true,
         "versions": [
-            "4.0"
+            "4.0",
+            "4.0.3"
         ]
     },
     "K16-Max": {
-        "default": "4.0",
+        "default": "4.0.5",
         "mspm0": true,
         "versions": [
-            "4.0"
+            "4.0",
+            "4.0.5"
         ]
     },
     "K16-Pro": {
-        "default": "4.1",
+        "default": "4.1.2",
         "mspm0": true,
         "versions": [
             "4.0",
-            "4.1"
+            "4.0.3",
+            "4.1",
+            "4.1.2"
         ]
     },
     "K32": {
-        "default": "4.0",
-        "mspm0": true,
-        "versions": [
-            "4.0"
-        ]
-    },
-    "K32-Max": {
-        "default": "4.1",
+        "default": "4.0.3",
         "mspm0": true,
         "versions": [
             "4.0",
-            "4.1"
+            "4.0.3"
+        ]
+    },
+    "K32-Max": {
+        "default": "4.1.1",
+        "mspm0": true,
+        "versions": [
+            "4.0",
+            "4.0.4",
+            "4.1",
+            "4.1.1"
         ]
     },
     "K32-Pro": {
-        "default": "4.0",
+        "default": "4.0.3",
         "mspm0": true,
         "versions": [
-            "4.0"
+            "4.0",
+            "4.0.3"
         ]
     },
     "K40D-PB": {
@@ -185,7 +193,8 @@
         "default": "3.0",
         "mspm0": true,
         "versions": [
-            "3.0"
+            "3.0",
+            "3.0.2"
         ]
     },
     "PocketScrollerV3": {
@@ -197,6 +206,16 @@
     },
     "ShowPlayer": {
         "default": "1.0.2",
+        "mspm0": false,
+        "versions": [
+            "1.0",
+            "1.0.1",
+            "1.0.2",
+            "2.0"
+        ]
+    },
+    "ShowPlayerAudio": {
+        "default": "2.0",
         "mspm0": false,
         "versions": [
             "1.0",

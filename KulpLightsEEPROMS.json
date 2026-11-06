@@ -279,6 +279,10 @@
             "versions": {
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K16/K16-4.0-eeprom.bin"
+                },
+                "Hardware Version 4.0 / EEPROM 4.0.3": {
+                    "url": "https://kulplights.com/firmwares/K16/K16-4.0.3-eeprom.bin",
+                    "notes": "Buttons and FPP reset now use the 8-bit expander the board actually has; the Exp GPIOs, which this board does not have, are no longer listed. Bank labels for ports 9-16 corrected."
                 }
             },
             "location": "eeprom",
@@ -292,8 +296,16 @@
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.0-eeprom.bin"
                 },
+                "Hardware Version 4.0 / EEPROM 4.0.3": {
+                    "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.0.3-eeprom.bin",
+                    "notes": "Exp 7 and Exp 8 on the expansion header were swapped. Bank labels for ports 9-16 corrected."
+                },
                 "Hardware Version 4.1 / EEPROM 4.1.1": {
                     "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.1-eeprom.bin"
+                },
+                "Hardware Version 4.1 / EEPROM 4.1.2": {
+                    "url": "https://kulplights.com/firmwares/K16-Pro/K16-Pro-4.1.2-eeprom.bin",
+                    "notes": "Exp 7 and Exp 8 on the expansion header were swapped."
                 }
             },
             "location": "eeprom",
@@ -306,6 +318,10 @@
             "versions": {
                 "Hardware Version 4.0 / EEPROM 4.0.4": {
                     "url": "https://kulplights.com/firmwares/K16-Max/K16-Max-4.0-eeprom.bin"
+                },
+                "Hardware Version 4.0 / EEPROM 4.0.5": {
+                    "url": "https://kulplights.com/firmwares/K16-Max/K16-Max-4.0.5-eeprom.bin",
+                    "notes": "Exp 7 and Exp 8 on the expansion header were swapped."
                 }
             },
             "location": "eeprom",
@@ -318,6 +334,10 @@
             "versions": {
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K32/K32-4.0-eeprom.bin"
+                },
+                "Hardware Version 4.0 / EEPROM 4.0.3": {
+                    "url": "https://kulplights.com/firmwares/K32/K32-4.0.3-eeprom.bin",
+                    "notes": "Buttons and FPP reset now use the 8-bit expander the board actually has; the Exp GPIOs, which this board does not have, are no longer listed."
                 }
             },
             "location": "eeprom",
@@ -330,6 +350,10 @@
             "versions": {
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K32-Pro/K32-Pro-4.0-eeprom.bin"
+                },
+                "Hardware Version 4.0 / EEPROM 4.0.3": {
+                    "url": "https://kulplights.com/firmwares/K32-Pro/K32-Pro-4.0.3-eeprom.bin",
+                    "notes": "Exp 7 and Exp 8 on the expansion header were swapped."
                 }
             },
             "location": "eeprom",
@@ -343,8 +367,16 @@
                 "Hardware Version 4.0 / EEPROM 4.0.2": {
                     "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.0-eeprom.bin"
                 },
+                "Hardware Version 4.0 / EEPROM 4.0.4": {
+                    "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.0.4-eeprom.bin",
+                    "notes": "Exp 7 and Exp 8 on the expansion header were swapped."
+                },
                 "Hardware Version 4.1 / EEPROM 4.1": {
                     "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.1-eeprom.bin"
+                },
+                "Hardware Version 4.1 / EEPROM 4.1.1": {
+                    "url": "https://kulplights.com/firmwares/K32-Max/K32-Max-4.1.1-eeprom.bin",
+                    "notes": "Exp 7 and Exp 8 on the expansion header were swapped."
                 }
             },
             "location": "eeprom",
@@ -512,7 +544,6 @@
                 "Hardware Version 2.0 / EEPROM 2.0.0": {
                     "url": "https://kulplights.com/firmwares/ShowPlayer/ShowPlayer-2.0-eeprom.bin"
                 }
-
             },
             "location": "eeprom",
             "platforms": [
