@@ -14,14 +14,9 @@
                 "2.2 (Blue/Yellow)": {
                     "url": "https://wiredwatts.com/firmwares/K4-PB/K4-PB-2.2-Y-eeprom.bin"
                 },
-                "3.0": {
-                    "url": "https://wiredwatts.com/firmwares/K4-PB/K4-PB-3.0-eeprom.bin"
-                },
-                "3.0 (PocketBeagle2)": {
-                    "url": "https://wiredwatts.com/firmwares/K4-PB/K4-PB-3.0-eeprom.bin",
-                    "platforms": [
-                        "PocketBeagle2"
-                    ]
+                "Hardware Version 3.0 / EEPROM 3.0.1": {
+                    "url": "https://wiredwatts.com/firmwares/K4-PB/K4-PB-3.0.1-eeprom.bin",
+                    "notes": "For FPP 9.5+, PocketBeagle and PocketBeagle2"
                 },
                 "3.0 (Blue/Yellow)": {
                     "url": "https://wiredwatts.com/firmwares/K4-PB/K4-PB-3.0-Y-eeprom.bin"
@@ -123,8 +118,9 @@
                         "PocketBeagle2"
                     ]
                 },
-                "2.6 (PocketBeagle2)": {
-                    "url": "https://wiredwatts.com/firmwares/K8-PB/K8-PB-2.6-PB2-eeprom.bin",
+                "Hardware Version 2.6 / EEPROM 2.6.1": {
+                    "url": "https://wiredwatts.com/firmwares/K8-PB/K8-PB-2.6.1-eeprom.bin",
+                    "notes": "For FPP 9.5+",
                     "platforms": [
                         "PocketBeagle2"
                     ]
@@ -358,6 +354,10 @@
                 },
                 "3.0 (Blue/Yellow)": {
                     "url": "https://wiredwatts.com/firmwares/K40D-PB/K40D-PB-3.0-Y-eeprom.bin"
+                },
+                "Hardware Version 3.0 / EEPROM 3.0.1": {
+                    "url": "https://wiredwatts.com/firmwares/K40D-PB/K40D-PB-3.0.1-eeprom.bin",
+                    "notes": "For FPP 9.5+, PocketBeagle and PocketBeagle2"
                 }
             },
             "location": "eeprom",

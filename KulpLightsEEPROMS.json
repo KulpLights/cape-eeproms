@@ -167,8 +167,9 @@
                         "PocketBeagle2"
                     ]
                 },
-                "2.6 (PocketBeagle2)": {
-                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-2.6-PB2-eeprom.bin",
+                "Hardware Version 2.6 / EEPROM 2.6.1": {
+                    "url": "https://kulplights.com/firmwares/K8-PB/K8-PB-2.6.1-eeprom.bin",
+                    "notes": "For FPP 9.5+",
                     "platforms": [
                         "PocketBeagle2"
                     ]
